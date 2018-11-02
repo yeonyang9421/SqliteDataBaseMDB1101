@@ -11,28 +11,37 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     MyDBOpenHelper dbOpenHelper;
     SQLiteDatabase mdb;
-    Button buttonInsert, buttonSelect, buttonUpdate, buttonDelete, buttonDelete_id;
+    Button buttonInsert, buttonSelect, buttonUpdate, buttonDelete, buttonDelete_id, buttonSearch, buttonAddVisited;
     EditText editTextCountry, editTextCity;
-    int id;
+    TextView textViewPKid,textViewCount;
+    String strPkID;
+    Cursor cursor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        dbOpenHelper=new MyDBOpenHelper(this, "awe.db",null, 1);
+        dbOpenHelper=new MyDBOpenHelper(this, "awe.db",null, 2);
         mdb=dbOpenHelper.getWritableDatabase();
-
         editTextCountry=findViewById(R.id.editTextCountry);
+        textViewPKid=findViewById(R.id.textViewPKid);
+        textViewCount=findViewById(R.id.textViewCount);
         editTextCity=findViewById(R.id.editTextCity);
         buttonInsert=findViewById(R.id.buttonInsert);
         buttonSelect=findViewById(R.id. buttonSelect);
         buttonUpdate=findViewById(R.id. buttonUpdate);
         buttonDelete=findViewById(R.id.buttonDelete);
         buttonDelete_id=findViewById(R.id.buttonDelete_id);
+        buttonSearch=findViewById(R.id.buttonSearch);
+        buttonAddVisited=findViewById(R.id.buttonAddVisited);
+        buttonSearch.setOnClickListener(this);
         buttonInsert.setOnClickListener(this);
         buttonSelect.setOnClickListener(this);
         buttonUpdate.setOnClickListener(this);
@@ -42,23 +51,43 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        String country, city;
+        String country, city,query;
         TextView textViewShow;
         textViewShow=findViewById(R.id.textViewShow);
         EditText editTextCountry=findViewById(R.id.editTextCountry);
         country=editTextCountry.getText().toString();
-        EditText editTextCity=findViewById(R.id.editTextCity);
-        city=editTextCity.getText().toString();
-        String inputcountry,inputcity;
-
+        EditText textViewCity=findViewById(R.id.editTextCity);
+        city=textViewCity.getText().toString();
+        String inputcountry,inputcity,strPkID;
+        int visitedTotal;
         switch (v.getId()){
+            case R.id.buttonAddVisited:
+                strPkID=textViewPKid.getText().toString();
+                query="Insert into awe_country_visitiedcount values('" + strPkID + "')";
+                mdb.execSQL(query);
+                break;
+
+            case R.id.buttonSearch:
+                country=editTextCountry.getText().toString();
+                query="Select pkid, country, city, count(fkid) visitedTotal "+
+                        "From awe_country inner join awe_country_visitedcount " +
+                        "on pkid=fkid and country ='" + country + "' ";
+                cursor=mdb.rawQuery(query,null);
+                if(cursor.getCount()>0){
+                    cursor.moveToFirst();
+                    textViewCity.setText(city);
+                    visitedTotal=cursor.getInt(cursor.getColumnIndex("visitedTotal"));
+                    textViewCount.setText(String.valueOf(visitedTotal));
+                }
+
             case  R.id.buttonInsert:
-                mdb.execSQL("INSERT INTO awe_country VALUES(null, '"+ country + "','"+city+"');");
+                SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+                String datetime = format.format(new Date());
+                mdb.execSQL("INSERT INTO awe_country VALUES('"+datetime+"', '"+ country + "','"+city+"');");
                 textViewShow.setText(dbRead());
                 break;
             case R.id.buttonSelect:
                 String str = dbRead();
-                String query;
                 Cursor cursor;
                       if(str.length()>0){
                           textViewShow.setText(str);
@@ -92,17 +121,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String country;
         String city;
         String query="Select * From awe_country";
-        Cursor cursor=mdb.rawQuery(query,null);
+        cursor=mdb.rawQuery(query,null);
         String str="";
 
         while(cursor.moveToNext()) {
-            id = cursor.getInt(0);
+            strPkID = cursor.getString(0);
             country = cursor.getString(cursor.getColumnIndex("country"));
             city = cursor.getString(2);
-            str += (id + " : " + country + " - " + city + "\n");
+            str += (strPkID + " : " + country + " - " + city + "\n");
         }
         if(str.equals(""))
             str="no record";
         return str;
     }
 }
+

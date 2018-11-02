@@ -18,7 +18,10 @@ public class MyDBOpenHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+       //Droop 구문 쓰기
+        db.execSQL("DROP TABLE awe_country ;");
+        db.execSQL("CREATE TABLE awe_country(pkid TEXT PRIMARY KEY, country TEXT, city TEXT);");
+        db.execSQL("CREATE TABLE awe_country_visitedcount(fkid TEXT);");
 
     }
 }

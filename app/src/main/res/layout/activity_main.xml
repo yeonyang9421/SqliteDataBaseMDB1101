@@ -7,52 +7,95 @@
     tools:context=".MainActivity"
     android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/editTextCountry"
-        android:hint="Country"
-        android:textSize="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-    <EditText
-        android:id="@+id/editTextCity"
-        android:hint="City"
-        android:textSize="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <EditText
+            android:id="@+id/editTextCountry"
+            android:hint="Country"
+            android:textSize="20dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+        <TextView
+            android:id="@+id/textViewPKid"
+            android:text="id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+             />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/editTextCity"
+            android:hint="City"
+            android:textSize="20dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/textViewCount"
+            android:text="count"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+                <Button
+                    android:id="@+id/buttonSearch"
+                    android:text="Search"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <Button
+                    android:id="@+id/buttonAddVisited"
+                    android:text="Add Visited"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+    </LinearLayout>
+
 
     <Button
         android:id="@+id/buttonInsert"
         android:text="Insert Record"
-        android:textSize="25dp"
+        android:textSize="15dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <Button
         android:id="@+id/buttonSelect"
         android:text="Read Data"
-        android:textSize="25dp"
+        android:textSize="15dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <Button
         android:id="@+id/buttonUpdate"
         android:text="Update Record"
-        android:textSize="25dp"
+        android:textSize="15dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <Button
         android:id="@+id/buttonDelete"
         android:text="Delete Record by Country"
-        android:textSize="25dp"
+        android:textSize="15dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <Button
         android:id="@+id/buttonDelete-id"
         android:text="Delete Record by Id"
-        android:textSize="25dp"
+        android:textSize="15dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
