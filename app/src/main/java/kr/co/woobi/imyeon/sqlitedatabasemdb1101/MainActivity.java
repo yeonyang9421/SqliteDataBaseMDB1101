@@ -56,9 +56,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         textViewShow=findViewById(R.id.textViewShow);
         EditText editTextCountry=findViewById(R.id.editTextCountry);
         country=editTextCountry.getText().toString();
-        EditText textViewCity=findViewById(R.id.editTextCity);
-        city=textViewCity.getText().toString();
-        String inputcountry,inputcity,strPkID;
+        EditText editTextCity=findViewById(R.id.editTextCity);
+        city=editTextCity.getText().toString();
+        String inputcountry,inputcity,strPkID="";
         int visitedTotal;
         switch (v.getId()){
             case R.id.buttonAddVisited:
@@ -69,13 +69,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.buttonSearch:
                 country=editTextCountry.getText().toString();
-                query="Select pkid, country, city, count(fkid) visitedTotal "+
-                        "From awe_country inner join awe_country_visitedcount " +
+                query="Select pkid, country, city, counct(fkid) visitedTotal "+
+                        "From awe_country " +
+                        "left join awe_country_visitedcount " +
                         "on pkid=fkid and country ='" + country + "' ";
                 cursor=mdb.rawQuery(query,null);
                 if(cursor.getCount()>0){
                     cursor.moveToFirst();
-                    textViewCity.setText(city);
+                    editTextCity.setText(cursor.getColumnIndex("city"));
+                    textViewPKid.setText(cursor.getColumnIndex("pkid"));
                     visitedTotal=cursor.getInt(cursor.getColumnIndex("visitedTotal"));
                     textViewCount.setText(String.valueOf(visitedTotal));
                 }
